@@ -1,0 +1,155 @@
+#!/usr/bin/env bash
+
+set -e # Exit on errors
+set -x # Be verbose
+
+##########################################################################
+# GET DEPENDENCIES
+##########################################################################
+
+apt_packages_basic=(
+  automake
+  autotools-dev
+  ca-certificates
+  cimg-dev
+  cmake
+  desktop-file-utils
+  file
+  fuse
+  gcc
+  g++
+  git
+  libfuse-dev
+  libjpeg-dev
+  libpng-dev
+  libssl-dev
+  libtool
+  make
+  patch
+  patchelf
+  pkg-config
+  wget
+  xxd
+  )
+
+apt-get update
+apt-get install -y --no-install-recommends \
+  "${apt_packages_basic[@]}"
+
+##########################################################################
+# Compile and install new CMake, needed by linuxdeploy-plugin-appimage
+##########################################################################
+
+cd /
+wget --no-check-certificate https://github.com/Kitware/CMake/archive/v3.17.5.tar.gz
+tar -zxf v3.17.5.tar.gz 
+cd CMake-3.17.5/
+mkdir -p build
+cd build
+cmake ..
+make -j$(nproc)
+make -j$(nproc) install
+/usr/local/bin/cmake --version
+cd /
+
+##########################################################################
+# Compile and install linuxdeploy
+##########################################################################
+
+git clone https://github.com/linuxdeploy/linuxdeploy
+cd linuxdeploy/
+git submodule update --init --recursive
+git checkout continuous
+mkdir -p build
+cd build
+/usr/local/bin/cmake ..
+/usr/local/bin/cmake --build . -j$(nproc)
+/usr/local/bin/cmake --build . --target install
+mv /linuxdeploy/build/bin /tools
+export PATH=/tools:$PATH
+linuxdeploy --version
+cd /
+
+##########################################################################
+# Compile and install linuxdeploy-plugin-qt
+##########################################################################
+
+git clone https://github.com/linuxdeploy/linuxdeploy-plugin-qt
+cd linuxdeploy-plugin-qt/
+git submodule update --init --recursive
+git checkout continuous
+mkdir -p build
+cd build
+/usr/local/bin/cmake ..
+/usr/local/bin/cmake --build . -j$(nproc)
+/usr/local/bin/cmake --build . --target install
+mv /linuxdeploy-plugin-qt/build/bin/linuxdeploy-plugin-qt /tools/linuxdeploy-plugin-qt
+linuxdeploy --list-plugins
+cd /
+
+##########################################################################
+# Compile and install linuxdeploy-plugin-appimage
+##########################################################################
+
+git clone https://github.com/linuxdeploy/linuxdeploy-plugin-appimage
+cd linuxdeploy-plugin-appimage/
+git submodule update --init --recursive
+git checkout continuous
+mkdir -p build
+cd build
+/usr/local/bin/cmake ..
+/usr/local/bin/cmake --build . -j$(nproc)
+/usr/local/bin/cmake --build . --target install
+mv /usr/local/bin/linuxdeploy-plugin-appimage /tools/linuxdeploy-plugin-appimage
+cd /
+linuxdeploy --list-plugins
+
+
+##########################################################################
+# Compile and install AppImageKit
+##########################################################################
+
+git clone https://github.com/AppImage/AppImageKit
+cd AppImageKit/
+git submodule update --init --recursive
+git checkout 12
+mkdir -p build
+cd build
+/usr/local/bin/cmake ..
+/usr/local/bin/cmake --build . -j$(nproc)
+/usr/local/bin/cmake --build . --target install
+cd /
+appimagetool --version
+
+##########################################################################
+# Install dependencies needed for deploy step
+##########################################################################
+
+apt_packages_dep=(
+ libasound2
+ portaudio19-dev
+ libportmidi0
+ libpulse0
+ libevent-dev
+ libre2-3
+ libwebpdemux2
+ libxslt1-dev
+ libegl1-mesa
+ )
+
+apt-get install -y --no-install-recommends \
+  "${apt_packages_dep[@]}"
+
+# tidy up (reduce size of Docker image)
+apt-get clean autoclean
+apt-get autoremove --purge -y
+rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
+
+# delete build folders
+rm -rf v3.17.5.tar.gz*
+rm -rf CMake-3.17.5
+rm -rf /linuxdeploy*
+rm -rf AppImageKit
+
+echo "Recipe has finished!" >&2
+
