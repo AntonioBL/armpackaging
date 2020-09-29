@@ -127,14 +127,15 @@ appimagetool --version
 
 apt_packages_dep=(
  libasound2
- portaudio19-dev
+ libegl1-mesa
+ libevent-dev
+ libgl1
  libportmidi0
  libpulse0
- libevent-dev
  libre2-3
  libwebpdemux2
  libxslt1-dev
- libegl1-mesa
+ portaudio19-dev
  )
 
 apt-get install -y --no-install-recommends \
