@@ -126,6 +126,8 @@ appimagetool --version
 ##########################################################################
 
 apt_packages_dep=(
+ appstream
+ gnupg2
  libasound2
  libegl1-mesa
  libevent-dev
@@ -135,7 +137,9 @@ apt_packages_dep=(
  libre2-3
  libwebpdemux2
  libxslt1-dev
+ libxtables12
  portaudio19-dev
+ zsync
  )
 
 apt-get install -y --no-install-recommends \
