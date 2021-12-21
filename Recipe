@@ -10,6 +10,7 @@ set -x # Be verbose
 apt_packages_basic=(
   automake
   autotools-dev
+  boost1.67
   ca-certificates
   cimg-dev
   cmake
@@ -19,7 +20,9 @@ apt_packages_basic=(
   gcc
   g++
   git
+  libcairo2-dev
   libfuse-dev
+  libglib2.0-dev
   libjpeg-dev
   libpng-dev
   libssl-dev
@@ -36,20 +39,21 @@ apt-get update
 apt-get install -y --no-install-recommends \
   "${apt_packages_basic[@]}"
 
+cd /
+
 ##########################################################################
-# Compile and install new CMake, needed by linuxdeploy-plugin-appimage
+# Compile and install nlohmann-json
 ##########################################################################
 
-cd /
-wget --no-check-certificate https://github.com/Kitware/CMake/archive/v3.17.5.tar.gz
-tar -zxf v3.17.5.tar.gz 
-cd CMake-3.17.5/
+git clone https://github.com/nlohmann/json
+cd json/
+git submodule update --init --recursive
+git checkout v3.10.4
 mkdir -p build
 cd build
-cmake ..
-make -j$(nproc)
-make -j$(nproc) install
-/usr/local/bin/cmake --version
+cmake -DBUILD_TESTING=OFF ..
+cmake --build . -j $(nproc)
+cmake --build . --target install
 cd /
 
 ##########################################################################
@@ -62,9 +66,8 @@ git submodule update --init --recursive
 git checkout continuous
 mkdir -p build
 cd build
-/usr/local/bin/cmake ..
-/usr/local/bin/cmake --build . -j$(nproc)
-/usr/local/bin/cmake --build . --target install
+cmake -DBUILD_TESTING=OFF ..
+cmake --build . -j $(nproc)
 mv /linuxdeploy/build/bin /tools
 export PATH=/tools:$PATH
 linuxdeploy --version
@@ -80,9 +83,9 @@ git submodule update --init --recursive
 git checkout continuous
 mkdir -p build
 cd build
-/usr/local/bin/cmake ..
-/usr/local/bin/cmake --build . -j$(nproc)
-/usr/local/bin/cmake --build . --target install
+cmake -DBUILD_TESTING=OFF ..
+cmake --build . -j $(nproc)
+cmake --build . --target install
 mv /linuxdeploy-plugin-qt/build/bin/linuxdeploy-plugin-qt /tools/linuxdeploy-plugin-qt
 linuxdeploy --list-plugins
 cd /
@@ -97,9 +100,9 @@ git submodule update --init --recursive
 git checkout continuous
 mkdir -p build
 cd build
-/usr/local/bin/cmake ..
-/usr/local/bin/cmake --build . -j$(nproc)
-/usr/local/bin/cmake --build . --target install
+cmake -DBUILD_TESTING=OFF ..
+cmake --build . -j $(nproc)
+cmake --build . --target install
 mv /usr/local/bin/linuxdeploy-plugin-appimage /tools/linuxdeploy-plugin-appimage
 cd /
 linuxdeploy --list-plugins
@@ -115,9 +118,9 @@ git submodule update --init --recursive
 git checkout 12
 mkdir -p build
 cd build
-/usr/local/bin/cmake ..
-/usr/local/bin/cmake --build . -j$(nproc)
-/usr/local/bin/cmake --build . --target install
+cmake -DBUILD_TESTING=OFF ..
+cmake --build . -j $(nproc)
+cmake --build . --target install
 cd /
 appimagetool --version
 
@@ -151,10 +154,9 @@ apt-get autoremove --purge -y
 rm -rf /tmp/* /var/{cache,log,backups}/* /var/lib/apt/*
 
 # delete build folders
-rm -rf v3.17.5.tar.gz*
-rm -rf CMake-3.17.5
 rm -rf /linuxdeploy*
 rm -rf AppImageKit
+rm -rf /json
 
 echo "Recipe has finished!" >&2
 
