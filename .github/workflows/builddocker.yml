@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - master
+    - qt5.15.2
 
 jobs:
   build_armhf_docker_image:
@@ -20,7 +21,7 @@ jobs:
       with:
         username: ${{secrets.DOCKER_USERNAME}}
         password: ${{secrets.DOCKER_PASSWORD}}
-        repository: antoniobl/armpackaging
+        repository: antoniobl/qt515armpackaging
         dockerfile: armhf.Dockerfile
         tags: armhf
 
@@ -38,6 +39,6 @@ jobs:
       with:
         username: ${{secrets.DOCKER_USERNAME}}
         password: ${{secrets.DOCKER_PASSWORD}}
-        repository: antoniobl/armpackaging
+        repository: antoniobl/qt515armpackaging
         dockerfile: arm64.Dockerfile
         tags: arm64
