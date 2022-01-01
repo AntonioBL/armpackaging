@@ -115,7 +115,7 @@ linuxdeploy --list-plugins
 git clone https://github.com/AppImage/AppImageKit
 cd AppImageKit/
 git submodule update --init --recursive
-git checkout 12
+git checkout 13
 mkdir -p build
 cd build
 cmake -DBUILD_TESTING=OFF ..
