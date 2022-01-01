@@ -137,7 +137,6 @@ apt_packages_dep=(
  libgl1
  libportmidi0
  libpulse0
- libre2-3
  libwebpdemux2
  libxslt1-dev
  libxtables12
