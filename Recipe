@@ -136,6 +136,22 @@ apt_packages_dep=(
  libpulse0
  libre2-3
  libwebpdemux2
+ libx11-xcb
+ libxcb1
+ libxcb-glx0
+ libxcb-keysyms1
+ libxcb-icccm4
+ libxcb-image0
+ libxcb-randr0
+ libxcb-render-util0
+ libxcb-shape0
+ libxcb-shm0
+ libxcb-sync
+ libxcb-util0
+ libxcb-xfixes0
+ libxcb-xinerama0
+ libxcb-xkb
+ libxcb-xtest0
  libxslt1-dev
  libxtables12
  portaudio19-dev
