@@ -137,6 +137,7 @@ apt_packages_dep=(
  libgl1
  libportmidi0
  libpulse0
+ libssl1.1
  libwebpdemux2
  libx11-xcb1
  libxcb1
@@ -157,6 +158,7 @@ apt_packages_dep=(
  libxkbcommon-x11-0
  libxslt1-dev
  libxtables12
+ openssl
  portaudio19-dev
  zsync
  )
