@@ -154,6 +154,7 @@ apt_packages_dep=(
  libxcb-xinerama0
  libxcb-xkb1
  libxcb-xtest0
+ libxkbcommon-x11-0
  libxslt1-dev
  libxtables12
  portaudio19-dev
