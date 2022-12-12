@@ -14,6 +14,7 @@ apt_packages_basic=(
   ca-certificates
   cimg-dev
   cmake
+  curl
   desktop-file-utils
   file
   fuse
