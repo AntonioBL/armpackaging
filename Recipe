@@ -48,8 +48,8 @@ cd /
 
 git clone https://github.com/nlohmann/json
 cd json/
+git checkout --recurse-submodules v3.10.4
 git submodule update --init --recursive
-git checkout v3.10.4
 mkdir -p build
 cd build
 cmake -DBUILD_TESTING=OFF ..
@@ -63,8 +63,8 @@ cd /
 
 git clone https://github.com/linuxdeploy/linuxdeploy
 cd linuxdeploy/
+git checkout --recurse-submodules 1-alpha-20220822-1
 git submodule update --init --recursive
-git checkout 1-alpha-20220822-1
 mkdir -p build
 cd build
 cmake -DBUILD_TESTING=OFF ..
@@ -80,11 +80,10 @@ cd /
 
 git clone https://github.com/linuxdeploy/linuxdeploy-plugin-qt
 cd linuxdeploy-plugin-qt/
+git checkout --recurse-submodules 76a163b0d4aa527bfb80295
 git submodule update --init --recursive
-git checkout 76a163b0d4aa527bfb80295
 mkdir -p build
 cd build
-export CXXFLAGS=-lstdc++fs
 cmake -DBUILD_TESTING=OFF ..
 cmake --build . -j $(nproc)
 cmake --build . --target install
@@ -98,8 +97,8 @@ cd /
 
 git clone https://github.com/linuxdeploy/linuxdeploy-plugin-appimage
 cd linuxdeploy-plugin-appimage/
+git checkout --recurse-submodules continuous
 git submodule update --init --recursive
-git checkout continuous
 mkdir -p build
 cd build
 cmake -DBUILD_TESTING=OFF ..
@@ -116,8 +115,8 @@ linuxdeploy --list-plugins
 
 git clone https://github.com/AppImage/AppImageKit
 cd AppImageKit/
+git checkout --recurse-submodules 13
 git submodule update --init --recursive
-git checkout 13
 mkdir -p build
 cd build
 cmake -DBUILD_TESTING=OFF ..
