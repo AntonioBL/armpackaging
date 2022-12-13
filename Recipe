@@ -81,7 +81,7 @@ cd /
 git clone https://github.com/linuxdeploy/linuxdeploy-plugin-qt
 cd linuxdeploy-plugin-qt/
 git submodule update --init --recursive
-git checkout continuous
+git checkout 76a163b0d4aa527bfb80295
 mkdir -p build
 cd build
 cmake -DBUILD_TESTING=OFF ..
